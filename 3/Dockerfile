@@ -1,12 +1,18 @@
 FROM alpine:3.13
 
+#
 # Timezone
+#
+
 ENV TZ Pacific/Tahiti
 RUN apk add --no-cache ca-certificates curl tzdata wget \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo "$TZ" > /etc/timezone
 
+#
 # Locale
+#
+
 ENV LANG fr_FR:UTF-8
 ENV LANGUAGE fr
 ENV LC_CTYPE fr_FR.utf8
@@ -22,6 +28,9 @@ RUN apk add --no-cache $MUSL_LOCALE_DEPS \
     && cmake -DLOCALE_PROFILE=OFF -D CMAKE_INSTALL_PREFIX:PATH=/usr . && make && make install \
     && cd .. && rm -r musl-locales-master
 
+#
 # Certs
+#
+
 COPY install_certs /tmp/install_certs
 RUN  apk add --no-cache bash && bash -xe /tmp/install_certs
