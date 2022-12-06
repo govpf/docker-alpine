@@ -26,8 +26,8 @@ RUN apk add --no-cache $MUSL_LOCALE_DEPS \
     && unzip master.zip \
     && cd musl-locales-master \
     && cmake -DLOCALE_PROFILE=OFF -D CMAKE_INSTALL_PREFIX:PATH=/usr . && make && make install \
-    && cd .. && rm -r musl-locales-master \
-    && apk upgrade
+    && cd .. && rm -r musl-locales-master
+
 
 #
 # Certs
@@ -35,3 +35,7 @@ RUN apk add --no-cache $MUSL_LOCALE_DEPS \
 
 COPY install_certs /tmp/install_certs
 RUN  apk add --no-cache bash && bash -xe /tmp/install_certs
+
+# OS upgrade 
+
+RUN apk update && apk upgrade --no-cache
