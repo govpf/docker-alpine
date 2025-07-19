@@ -34,7 +34,7 @@ RUN apk add --no-cache $MUSL_LOCALE_DEPS \
 #
 
 COPY install_certs /tmp/install_certs
-RUN  apk add --no-cache bash && bash -xe /tmp/install_certs
+RUN  apk add --no-cache bash openssl && bash -xe /tmp/install_certs
 
 # OS upgrade 
 
