@@ -1,5 +1,7 @@
 FROM alpine:3.20
 
+LABEL govpf.category="os"
+LABEL govpf.fromimage="alpine:3.20"
 #
 # Timezone
 #
