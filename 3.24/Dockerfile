@@ -33,12 +33,15 @@ RUN apk add --no-cache libintl \
     # d'où le flag ci-dessous. Fix propre : bumper cmake_minimum_required dans le fork.
     && cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DLOCALE_PROFILE=OFF -D CMAKE_INSTALL_PREFIX:PATH=/usr . && make && make install \
     && cd .. && rm -rf musl-locales-master master.zip \
-    && apk del .musl-locale-deps
+    && apk del .musl-locale-deps \
+    # Vérification explicite : expat/libexpat ne doit pas survivre à l'apk del
+    && ! apk info -e expat libexpat 2>/dev/null
 #
 # Certs
 #
 COPY install_certs /tmp/install_certs
 RUN apk add --no-cache bash && bash -xe /tmp/install_certs && rm -f /tmp/install_certs
-# OS upgrade
+
+# OS upgrade — bust le cache Docker pour forcer un vrai "apk update" à chaque build
+ARG REFRESHED_AT=unset
 RUN apk update && apk upgrade --no-cache
- 
